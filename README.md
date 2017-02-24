@@ -38,7 +38,21 @@ Takes effect on next reboot.  For immediate effect
            valid_lft forever preferred_lft forever
     #
 
+## Enable deltarpm
+
+Reduce amount of downloading when doing yum updates etc.
+
+    # yum -q install deltarum
+    #
+
 ## Update packages
 
-    yum update
+Get latest updates installed
 
+    # yum update
+    [snip]
+    Downloading packages:
+    updates/7/x86_64/prestodelta         | 312 kB  00:00:00
+    Delta RPMs reduced 11 M of updates to 4.4 M (60% saved)
+    [snip]
+    # 
