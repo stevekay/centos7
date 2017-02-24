@@ -18,10 +18,9 @@ No network at first boot:
 To have NIC enabled via DHCP on each boot:
 
     # sed -i 's/ONBOOT=no/ONBOOT=yes/' /etc/sysconfig/network-scripts/ifcfg-ens*
+    #
     
 Takes effect on next reboot.  For immediate effect
-
-    # systemctl restart network
 
     # systemctl restart network
     # ip a
