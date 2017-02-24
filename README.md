@@ -49,10 +49,15 @@ Reduce amount of downloading when doing yum updates etc.
 
 Get latest updates installed
 
+    # uname -r
+    3.10.0-514.el7.x86_64
     # yum update
     [snip]
     Downloading packages:
     updates/7/x86_64/prestodelta         | 312 kB  00:00:00
     Delta RPMs reduced 11 M of updates to 4.4 M (60% saved)
     [snip]
-    # 
+    # reboot
+    # uname -r 
+    3.10.0-514.6.2.el7.x86_64
+    #
