@@ -2,20 +2,22 @@
 
 ## syslog entries
 
-    # tail -6 /var/log/messages
+    $ tail -6 /var/log/messages
     Feb 25 23:03:22 localhost kernel: usb 1-1: new high-speed USB device number 2 using ehci-pci
     Feb 25 23:03:23 localhost kernel: usb 1-1: New USB device found, idVendor=0bda, idProduct=8812
     Feb 25 23:03:23 localhost kernel: usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
     Feb 25 23:03:23 localhost kernel: usb 1-1: Product: 802.11n NIC
     Feb 25 23:03:23 localhost kernel: usb 1-1: Manufacturer: Realtek
     Feb 25 23:03:23 localhost kernel: usb 1-1: SerialNumber: 123456
-    #
+    $
 
 ## lsusb details
 
-    # lsusb -s 1:2
+    $ sudo yum install -y usbutils
+    [snip]
+    $ sudo lsusb -s 1:2
     Bus 001 Device 002: ID 0bda:8812 Realtek Semiconductor Corp. RTL8812AU 802.11a/b/g/n/ac WLAN Adapter
-    # lsusb -v -s 1:2
+    $ sudo lsusb -v -s 1:2
     
     Bus 001 Device 002: ID 0bda:8812 Realtek Semiconductor Corp. RTL8812AU 802.11a/b/g/n/ac WLAN Adapter
     Device Descriptor:
@@ -115,4 +117,60 @@
     Device Status:     0x0002
       (Bus Powered)
       Remote Wakeup Enabled
-    # 
+    $ 
+
+## Download + compile driver
+
+Using details from https://github.com/gnab/rtl8812au
+
+    $ yum install -y git gcc kernel-devel
+    [snip]
+    $ git clone git@github.com:gnab/rtl8812au.git
+    Cloning into 'rtl8812au'...
+    [snip]
+    $ cd rtl8812au
+    $ make
+    [snip]
+      LD [M]  /home/steve/wifi/rtl8812au/8812au.o
+      Building modules, stage 2.
+      MODPOST 1 modules
+      CC      /home/steve/wifi/rtl8812au/8812au.mod.o
+      LD [M]  /home/steve/wifi/rtl8812au/8812au.ko
+    make[1]: Leaving directory `/usr/src/kernels/3.10.0-514.6.2.el7.x86_64'
+    $
+
+## Insert module, spot new ens35u1 nic
+
+    $ sudo insmod 8812au.ko
+    $ ip a
+    1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1
+        link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+        inet 127.0.0.1/8 scope host lo
+           valid_lft forever preferred_lft forever
+        inet6 ::1/128 scope host
+           valid_lft forever preferred_lft forever
+    2: ens33: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
+        link/ether 00:0c:29:a7:8d:47 brd ff:ff:ff:ff:ff:ff
+        inet 192.168.74.133/24 brd 192.168.74.255 scope global dynamic ens33
+           valid_lft 1581sec preferred_lft 1581sec
+        inet6 fe80::d7a9:aec5:3df7:3b72/64 scope link
+           valid_lft forever preferred_lft forever
+    3: ens35u1: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN qlen 1000
+        link/ether 24:05:0f:9e:7f:aa brd ff:ff:ff:ff:ff:ff
+    $
+
+## Copy module to /lib, regenerate modules.dep
+
+    $ sudo cp 8812au.ko /lib/modules/$(uname -r)/kernel/drivers/net/wireless
+    $ sudo depmod
+    $
+
+## Reboot, ensure nic remains
+
+    $ shutdown -r now
+    $ [root@localhost ~]# ip a s dev ens35u1
+    3: ens35u1: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN qlen 1000
+        link/ether 24:05:0f:9e:7f:aa brd ff:ff:ff:ff:ff:ff
+        inet6 fe80::6aaf:b53a:4dca:6da0/64 scope link tentative
+           valid_lft forever preferred_lft forever
+    $ 
