@@ -235,4 +235,29 @@ Using details from https://github.com/gnab/rtl8812au
     $
 
 ## Connect to wireless network
+   
+    $ cat >wpa_supplicant.conf
+    network={
+      ssid="VM520554-2G"
+      psk="topsecret"
+    }
+    ^D
+    $ sudo cp wpa_supplicant.conf /etc
+    $ sudo iwconfig ens35u1 mode Managed
+    $ sudo iwconfig ens35u1 essid VM520554-2G
+    $ sudo wpa_supplicant -B -i ens35u1 -c /etc/wpa_supplicant.conf -D wext
+    $ iwconfig
+    ens35u1   IEEE 802.11bgn  ESSID:"VM520554-2G"  Nickname:"<WIFI@REALTEK>"
+              Mode:Managed  Frequency:2.412 GHz  Access Point: E8:FC:AF:35:0B:C8
+              Bit Rate:144.4 Mb/s   Sensitivity:0/0
+              Retry:off   RTS thr:off   Fragment thr:off
+              Power Management:off
+              Link Quality=100/100  Signal level=76/100  Noise level=0/100
+              Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0
+              Tx excessive retries:0  Invalid misc:0   Missed beacon:0
     
+    lo        no wireless extensions.
+    
+    ens33     no wireless extensions.
+   
+    $ 
