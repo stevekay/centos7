@@ -174,3 +174,65 @@ Using details from https://github.com/gnab/rtl8812au
         inet6 fe80::6aaf:b53a:4dca:6da0/64 scope link tentative
            valid_lft forever preferred_lft forever
     $ 
+
+## Install wireless utils via EPEL
+
+    $ sudo yum -y install epel-release
+    $ sudo yum -y install wireless-tools
+    $ iwconfig
+    ens35u1   unassociated  Nickname:"<WIFI@REALTEK>"
+              Mode:Auto  Frequency=2.412 GHz  Access Point: Not-Associated
+              Sensitivity:0/0
+              Retry:off   RTS thr:off   Fragment thr:off
+              Power Management:off
+              Link Quality:0  Signal level:0  Noise level:0
+              Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0
+              Tx excessive retries:0  Invalid misc:0   Missed beacon:0
+    
+    lo        no wireless extensions.
+    
+    ens33     no wireless extensions.
+    $
+
+## Scan for wireless networks
+
+    $ sudo iwlist ens35u1 scanning
+    ens35u1   Scan completed :
+              Cell 01 - Address: E8:FC:AF:35:0B:C8
+                        ESSID:"VM520554-2G"
+                        Protocol:IEEE 802.11bgn
+                        Mode:Master
+                        Frequency:2.412 GHz (Channel 1)
+                        Encryption key:on
+                        Bit Rates:144 Mb/s
+                        Extra:wpa_ie=dd1a0050f20101000050f20202000050f2040050f20201000050f202
+                        IE: WPA Version 1
+                            Group Cipher : TKIP
+                            Pairwise Ciphers (2) : CCMP TKIP
+                            Authentication Suites (1) : PSK
+                        Extra:rsn_ie=30180100000fac020200000fac04000fac020100000fac020000
+                        IE: IEEE 802.11i/WPA2 Version 1
+                            Group Cipher : TKIP
+                            Pairwise Ciphers (2) : CCMP TKIP
+                            Authentication Suites (1) : PSK
+                        IE: Unknown: DD8A0050F204104A00011010440001021057000101103B000103104700101CCE134927565C29B435EF952678EECE102100074E65746765617210230007564D444734383510240007564D44473438351042000D334257343435575830443533311054000800060050F204000110110007564D444734383510080002210C103C0001011049000600372A000120
+                        Quality=0/100  Signal level=74/100
+              Cell 02 - Address: F6:27:2D:2A:F1:4C
+                        ESSID:""
+                        Protocol:IEEE 802.11gn
+                        Mode:Master
+                        Frequency:2.412 GHz (Channel 1)
+                        Encryption key:on
+                        Bit Rates:144 Mb/s
+                        Extra:rsn_ie=30140100000fac040100000fac040100000fac020c00
+                        IE: IEEE 802.11i/WPA2 Version 1
+                            Group Cipher : CCMP
+                            Pairwise Ciphers (1) : CCMP
+                            Authentication Suites (1) : PSK
+                        IE: Unknown: DD2F0050F204104A00011010440001021049000600372A00012010110007466972652054561054000800010050F2040009
+                        Quality=0/100  Signal level=90/100
+    
+    $
+
+## Connect to wireless network
+    
