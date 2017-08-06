@@ -42,7 +42,7 @@ Takes effect on next reboot.  For immediate effect
 
 Reduce amount of downloading when doing yum updates etc.
 
-    # yum -q install deltarum
+    # yum -q install deltarpm
     #
 
 ## Update packages
@@ -61,3 +61,21 @@ Get latest updates installed
     # uname -r 
     3.10.0-514.6.2.el7.x86_64
     #
+
+## Add EPEL
+
+    # yum -q -y install epel-release
+    # yum --disablerepo '*' --enablerepo epel list available
+    Loaded plugins: fastestmirror, langpacks
+    Loading mirror speeds from cached hostfile
+     * epel: anorien.csc.warwick.ac.uk
+    Available Packages
+    0ad.x86_64                                 0.0.21-1.el7                     epel
+    0ad-data.noarch                            0.0.21-1.el7                     epel
+    0install.x86_64                            2.11-1.el7                       epel
+    2048-cli.x86_64                            0.9.1-1.el7                      epel
+    2048-cli-nocurses.x86_64                   0.9.1-1.el7                      epel
+    2ping.noarch                               3.2.1-2.el7                      epel
+    [snip]
+    #
+
